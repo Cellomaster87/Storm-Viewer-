@@ -51,6 +51,7 @@ class ViewController: UITableViewController {
             
             // 2. set its selectedImage property
             vc.selectedImage = pictures[indexPath.row]
+            vc.title = "Picture \(indexPath.row + 1) of \(pictures.count)"
             
             // 3. push it on the navigation controller
             navigationController?.pushViewController(vc, animated: true)
