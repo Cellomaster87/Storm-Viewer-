@@ -16,6 +16,7 @@ class ViewController: UITableViewController {
         
         title = "Storm Viewer"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(suggest))
         
         let fm = FileManager.default
         let path = Bundle.main.resourcePath!
@@ -57,6 +58,14 @@ class ViewController: UITableViewController {
             // 3. push it on the navigation controller
             navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    @objc func suggest() {
+        let shareLink = "Try it: https://github.com/Cellomaster87/Storm-Viewer-"
+        
+        let vc = UIActivityViewController(activityItems: [shareLink], applicationActivities: [])
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(vc, animated: true)
     }
 
 
