@@ -18,20 +18,8 @@ class ViewController: UITableViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(suggest))
         
-        let fm = FileManager.default
-        let path = Bundle.main.resourcePath!
-        let items = try! fm.contentsOfDirectory(atPath: path)
-        
-        for item in items {
-            if item.hasPrefix("nssl") {
-                // this is a picture to load!
-                pictures.append(item)
-            }
-//            pictures.sort()
-        }
-        pictures.sort()
-        
-        print(pictures)
+        performSelector(inBackground: #selector(loadPictures), with: nil)
+        tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
     }
     
     // How many rows should appear in the table
@@ -60,6 +48,20 @@ class ViewController: UITableViewController {
         }
     }
     
+    @objc func loadPictures() {
+        let fm = FileManager.default
+        let path = Bundle.main.resourcePath!
+        let items = try! fm.contentsOfDirectory(atPath: path)
+        
+        for item in items {
+            if item.hasPrefix("nssl") {
+                // this is a picture to load!
+                pictures.append(item)
+            }
+        }
+        pictures.sort()
+    }
+    
     @objc func suggest() {
         let shareLink = "Try it: https://github.com/Cellomaster87/Storm-Viewer-"
         
@@ -67,7 +69,5 @@ class ViewController: UITableViewController {
         vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(vc, animated: true)
     }
-
-
 }
 
