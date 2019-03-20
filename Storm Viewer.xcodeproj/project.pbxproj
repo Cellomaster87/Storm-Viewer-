@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D6850582242E85600399EB1 /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6850572242E85600399EB1 /* ImageCell.swift */; };
 		2D6CD3722218B84A006F956A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6CD3712218B84A006F956A /* AppDelegate.swift */; };
 		2D6CD3742218B84A006F956A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6CD3732218B84A006F956A /* ViewController.swift */; };
 		2D6CD3772218B84A006F956A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D6CD3752218B84A006F956A /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2D6850572242E85600399EB1 /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		2D6CD36E2218B84A006F956A /* Storm Viewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Storm Viewer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D6CD3712218B84A006F956A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D6CD3732218B84A006F956A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				2D6CD3732218B84A006F956A /* ViewController.swift */,
 				2DC14ADA221B5A11003F7BE2 /* DetailViewController.swift */,
 				2D6CD3752218B84A006F956A /* Main.storyboard */,
+				2D6850572242E85600399EB1 /* ImageCell.swift */,
 				2D6CD3782218B84B006F956A /* Assets.xcassets */,
 				2D6CD37A2218B84B006F956A /* LaunchScreen.storyboard */,
 				2D6CD37D2218B84B006F956A /* Info.plist */,
@@ -187,6 +190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DC14ADB221B5A11003F7BE2 /* DetailViewController.swift in Sources */,
+				2D6850582242E85600399EB1 /* ImageCell.swift in Sources */,
 				2D6CD3742218B84A006F956A /* ViewController.swift in Sources */,
 				2D6CD3722218B84A006F956A /* AppDelegate.swift in Sources */,
 			);
