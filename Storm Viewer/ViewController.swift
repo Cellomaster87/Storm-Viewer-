@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UITableViewController {
     var pictures = [String]()
+    var pictDict = [String: Int]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +19,21 @@ class ViewController: UITableViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(suggest))
         
-        performSelector(inBackground: #selector(loadPictures), with: nil)
+        let defaults = UserDefaults.standard
+        if let savedData = defaults.object(forKey: "pictDict") as? Data,
+            let savedPictures = defaults.object(forKey: "pictures") as? Data {
+            let jsonDecoder = JSONDecoder()
+            
+            do {
+                pictDict = try jsonDecoder.decode([String: Int].self, from: savedData)
+                pictures = try jsonDecoder.decode([String].self, from: savedPictures)
+            } catch {
+                print("Failed to load saved data")
+            }
+        } else {
+            performSelector(inBackground: #selector(loadPictures), with: nil)
+        }
+        
         tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
     }
     
@@ -30,22 +45,24 @@ class ViewController: UITableViewController {
     // What each row should look like
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Picture", for: indexPath)
-        cell.textLabel?.text = pictures[indexPath.row]
+        let picture = pictures[indexPath.row]
+        cell.textLabel?.text = picture
+        cell.detailTextLabel?.text = "Viewed \(pictDict[picture]!) times."
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 1. try loading the vc
         if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
-            
-            // 2. set its selectedImage property
             vc.selectedImage = pictures[indexPath.row]
             vc.title = "Picture \(indexPath.row + 1) of \(pictures.count)"
-            
-            // 3. push it on the navigation controller
             navigationController?.pushViewController(vc, animated: true)
         }
+        
+        let picture = pictures[indexPath.row]
+        pictDict[picture]! += 1
+        save()
+        tableView.reloadData()
     }
     
     @objc func loadPictures() {
@@ -55,8 +72,8 @@ class ViewController: UITableViewController {
         
         for item in items {
             if item.hasPrefix("nssl") {
-                // this is a picture to load!
                 pictures.append(item)
+                pictDict[item] = 0
             }
         }
         pictures.sort()
@@ -68,6 +85,18 @@ class ViewController: UITableViewController {
         let vc = UIActivityViewController(activityItems: [shareLink], applicationActivities: [])
         vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(vc, animated: true)
+    }
+    
+    func save() {
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(pictDict),
+            let savedPictures = try? jsonEncoder.encode(pictures) {
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "pictDict")
+            defaults.set(savedPictures, forKey: "pictures")
+        } else {
+            print("Failed to save data.")
+        }
     }
 }
 
