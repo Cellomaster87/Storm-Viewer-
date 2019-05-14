@@ -36,25 +36,40 @@ class DetailViewController: UIViewController {
     }
     
     @objc func shareTapped() {
-        guard let image = imageView.image?.jpegData(compressionQuality: 0.8) else {
+        let renderedImage = renderTextOnImage()
+        if let image = renderedImage?.jpegData(compressionQuality: 0.8) {
+            let vc = UIActivityViewController(activityItems: [image, selectedImage!], applicationActivities: [])
+            vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem // this is for iPad
+            present(vc, animated: true)
+        } else {
             print("No image found")
-            return
         }
-        
-        let vc = UIActivityViewController(activityItems: [image, selectedImage!], applicationActivities: [])
-        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem // this is for iPad
-        present(vc, animated: true)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func renderTextOnImage() -> UIImage? {
+        guard let image = imageView.image else { return nil }
+        
+        let size = image.size
+        let renderer = UIGraphicsImageRenderer(size: size)
+        
+        let renderedImage = renderer.image { ctx in
+            image.draw(at: CGPoint(x: 0, y: 0))
+            
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .left
+            
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 48),
+                .foregroundColor: UIColor.white.cgColor,
+                .paragraphStyle: paragraphStyle
+            ]
+            
+            let string = "From Storm Viewer!"
+            let attributedString = NSAttributedString(string: string, attributes: attributes)
+            
+            attributedString.draw(with: CGRect(x: 32, y: 32, width: 300, height: 150), options: .usesLineFragmentOrigin, context: nil)
+        }
+        
+        return renderedImage
     }
-    */
-
 }
